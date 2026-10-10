@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vehicle-fleet-data-pipeline"
+version = "0.1.0"
+description = "Production-grade Vehicle Fleet Data Pipeline in Python & PostgreSQL"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Data Engineering Team" }
+]
+dependencies = [
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.2.0",
+    "pandas>=2.2.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "sqlalchemy>=2.0.0",
+    "psycopg[binary]>=3.1.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.4.0"
+]
+
+[project.scripts]
+fleet-pipeline = "fleet_pipeline.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP"]
+ignore = []

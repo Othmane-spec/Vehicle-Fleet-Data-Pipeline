@@ -1,0 +1,6 @@
+device_id,device_name,vehicle_type,latitude,longitude,timestamp
+vehicle-101,Express Shuttle 1,TransitBus,33.5750,-7.5870,2026-10-10T12:00:00Z
+vehicle-102,City Van 2,DeliveryVan,33.5820,-7.5950,2026-10-10T12:05:00Z
+,Ghost Vehicle,TransitBus,33.5800,-7.5900,2026-10-10T12:10:00Z
+vehicle-103,Polar Outlier,HeavyTruck,92.5000,-7.5920,2026-10-10T12:15:00Z
+vehicle-104,Bad Date Vehicle,TransitBus,33.5810,-7.5910,2026-99-99T99:99:99Z

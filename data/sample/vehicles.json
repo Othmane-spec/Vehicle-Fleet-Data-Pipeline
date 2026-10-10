@@ -1,0 +1,98 @@
+[
+  {
+    "device": {
+      "id": "vehicle-001",
+      "name": "Bus 001",
+      "vehicleType": "TransitBus"
+    },
+    "position": {
+      "latitude": 33.5731,
+      "longitude": -7.5898,
+      "timestamp": "2026-10-10T10:30:00Z"
+    }
+  },
+  {
+    "device": {
+      "id": "vehicle-002",
+      "name": "Van 002",
+      "vehicleType": "DeliveryVan"
+    },
+    "position": {
+      "latitude": 33.5892,
+      "longitude": -7.6038,
+      "timestamp": "2026-10-10T10:35:00Z"
+    }
+  },
+  {
+    "device": {
+      "id": "vehicle-003",
+      "name": "Truck 003",
+      "vehicleType": "HeavyTruck"
+    },
+    "position": {
+      "latitude": 33.6015,
+      "longitude": -7.6189,
+      "timestamp": "2026-10-10T10:40:00Z"
+    }
+  },
+  {
+    "device": {
+      "id": "",
+      "name": "Anonymous Bus",
+      "vehicleType": "TransitBus"
+    },
+    "position": {
+      "latitude": 33.5700,
+      "longitude": -7.5800,
+      "timestamp": "2026-10-10T10:45:00Z"
+    }
+  },
+  {
+    "device": {
+      "id": "vehicle-004",
+      "name": "Faulty GPS North",
+      "vehicleType": "ServiceCar"
+    },
+    "position": {
+      "latitude": 95.1234,
+      "longitude": -7.5900,
+      "timestamp": "2026-10-10T10:50:00Z"
+    }
+  },
+  {
+    "device": {
+      "id": "vehicle-005",
+      "name": "Faulty GPS West",
+      "vehicleType": "ServiceCar"
+    },
+    "position": {
+      "latitude": 33.5700,
+      "longitude": -195.4321,
+      "timestamp": "2026-10-10T10:55:00Z"
+    }
+  },
+  {
+    "device": {
+      "id": "vehicle-006",
+      "name": "Corrupted Clock",
+      "vehicleType": "TransitBus"
+    },
+    "position": {
+      "latitude": 33.5720,
+      "longitude": -7.5850,
+      "timestamp": "not-a-valid-date"
+    }
+  },
+  {
+    "device": {
+      "id": "vehicle-007",
+      "name": "Missing Coordinates",
+      "vehicleType": "TransitBus"
+    },
+    "position": {
+      "latitude": null,
+      "longitude": -7.5850,
+      "timestamp": "2026-10-10T11:00:00Z"
+    }
+  }
+]

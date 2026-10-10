@@ -1,0 +1,50 @@
+[
+  {
+    "device": {
+      "id": "bus-001",
+      "name": "Line A Bus",
+      "vehicleType": "TransitBus"
+    },
+    "position": {
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "timestamp": "2026-10-10T08:00:00Z"
+    }
+  },
+  {
+    "device": {
+      "id": "van-002",
+      "name": "Express Delivery",
+      "vehicleType": "DeliveryVan"
+    },
+    "position": {
+      "latitude": 48.8600,
+      "longitude": 2.3400,
+      "timestamp": "2026-10-10T08:05:00+02:00"
+    }
+  },
+  {
+    "device": {
+      "id": "",
+      "name": "Invalid Vehicle No ID",
+      "vehicleType": "TransitBus"
+    },
+    "position": {
+      "latitude": 48.8500,
+      "longitude": 2.3500,
+      "timestamp": "2026-10-10T08:10:00Z"
+    }
+  },
+  {
+    "device": {
+      "id": "bad-lat-003",
+      "name": "Invalid Latitude Vehicle",
+      "vehicleType": "Car"
+    },
+    "position": {
+      "latitude": 95.0,
+      "longitude": 2.3500,
+      "timestamp": "2026-10-10T08:15:00Z"
+    }
+  }
+]
