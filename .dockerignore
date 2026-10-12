@@ -1,0 +1,15 @@
+.git/
+.pytest_cache/
+.ruff_cache/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.coverage
+htmlcov/
+data/rejected/*.json
+!data/rejected/.gitkeep
+.env
+.env.*
+dist/
+build/
