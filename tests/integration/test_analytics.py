@@ -1,8 +1,10 @@
 """Integration tests verifying the required analytical SQL queries."""
 
 from datetime import UTC, datetime
+
 import pytest
 from sqlalchemy import create_engine, text
+
 from fleet_pipeline.database import init_db
 from fleet_pipeline.load import load_pipeline_data
 from fleet_pipeline.models import NormalizedRecord, RejectedRecord, ValidationResult
