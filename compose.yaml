@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: fleet_warehouse
+      POSTGRES_USER: fleet_app
+      POSTGRES_PASSWORD: change_me
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fleet_app -d fleet_warehouse"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pipeline:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_ENV: docker
+      LOG_LEVEL: INFO
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: fleet_warehouse
+      POSTGRES_USER: fleet_app
+      POSTGRES_PASSWORD: change_me
+      SOURCE_TYPE: file
+      SOURCE_FILE: data/sample/vehicles.json
+      REJECTED_DIR: data/rejected
+    volumes:
+      - ./data/rejected:/app/data/rejected
+    profiles:
+      - run
+
+volumes:
+  postgres_data:
