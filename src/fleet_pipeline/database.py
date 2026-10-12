@@ -1,9 +1,10 @@
 """Database connectivity, session management and schema execution."""
 
+import logging
 from collections.abc import Generator
 from contextlib import contextmanager
-import logging
 from pathlib import Path
+
 from sqlalchemy import Connection, Engine, create_engine, text
 from sqlalchemy.orm import Session, sessionmaker
 
