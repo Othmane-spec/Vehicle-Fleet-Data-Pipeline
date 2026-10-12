@@ -1,88 +1,132 @@
-# 🚗 Vehicle Fleet Data Pipeline
+# Vehicle Fleet Data Pipeline
 
-![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
-![PostgreSQL](https://img.shields.io/badge/postgres-15+-blue.svg)
-![Pydantic](https://img.shields.io/badge/pydantic-v2-green.svg)
-![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
+Pipeline ETL Python pour collecter, normaliser, valider et charger des donnees de telemetrie de vehicules dans PostgreSQL.
 
-## 📌 Présentation du Projet
+Le projet est pense comme un portfolio Data Engineering junior : il couvre l'extraction JSON/CSV, la validation qualite, la gestion des rejets, l'idempotence, le chargement transactionnel, les requetes analytiques, les tests automatises, Docker Compose et une CI GitHub Actions.
 
-Ce projet est un pipeline de données (ETL) de bout en bout conçu pour collecter, normaliser, valider et ingérer des données de télémétrie de véhicules dans un entrepôt de données PostgreSQL. 
+## Stack
 
-L'objectif principal est de transformer des données brutes et hétérogènes (provenant de fichiers JSON ou CSV) en tables analytiques fiables, tout en garantissant une qualité de donnée stricte et une idempotence totale.
+- Python 3.11+
+- Pydantic v2 et pydantic-settings
+- SQLAlchemy 2
+- PostgreSQL 15+
+- Pytest
+- Ruff
+- Docker Compose
 
-## 🏗️ Architecture Technique
+## Architecture
 
-Le pipeline suit une architecture modulaire basée sur les principes de séparation des responsabilités :
+Flux principal :
 
-### Flux de Données (ETL)
-1. **Extraction** : Lecture automatique de fichiers JSON/CSV avec gestion des erreurs fatales.
-2. **Normalisation** : Mapping des champs sources variés vers un schéma standard unique.
-3. **Validation** : Contrôle rigoureux des types, des bornes GPS (Latitude/Longitude) et des formats de date (UTC).
-4. **Gestion des Rejets** : Isolation des enregistrements invalides dans des fichiers de rejet avec motifs d'erreur détaillés.
-5. **Chargement** : Ingestion dans PostgreSQL avec mécanisme de `UPSERT` pour éviter les doublons.
+1. Extraction depuis `data/sample/vehicles.json` ou `data/sample/vehicles.csv`.
+2. Normalisation des champs source vers un schema commun.
+3. Validation des identifiants, coordonnees GPS et timestamps UTC.
+4. Sauvegarde des lignes invalides dans `data/rejected`.
+5. Chargement PostgreSQL transactionnel et idempotent.
+6. Audit des executions et des problemes qualite.
+7. Requetes analytiques dans `sql/analytics.sql`.
 
-### Stack Technique
-- **Langage** : Python 3.11+
-- **Validation & Settings** : Pydantic & Pydantic-Settings
-- **Base de données** : PostgreSQL
-- **Tests** : Pytest
-- **Gestion des dates** : python-dateutil
+Documentation complementaire :
 
-## 📊 Modèle de Données
+- [Architecture](docs/architecture.md)
+- [Data model](docs/data-model.md)
+- [Technical decisions](docs/decisions.md)
 
-Le projet implémente un schéma relationnel optimisé pour le suivi et l'analyse :
-- `etl_runs` : Historique et statistiques de chaque exécution du pipeline.
-- `vehicles` : Référentiel unique des véhicules de la flotte.
-- `vehicle_positions` : Historique des positions GPS liées aux véhicules.
-- `data_quality_issues` : Audit détaillé des lignes rejetées pour analyse de qualité.
+## Modele de donnees
 
-## 🚀 Installation et Lancement
+- `etl_runs` : historique des executions ETL.
+- `vehicles` : referentiel des vehicules.
+- `vehicle_positions` : positions GPS valides.
+- `data_quality_issues` : anomalies et rejets de qualite.
 
-### Prérequis
-- Python 3.11 ou supérieur
-- Une instance PostgreSQL active
+## Installation locale
 
-### Configuration
-1. Clonez le dépôt :
-   ```bash
-   git clone https://github.com/votre-utilisateur/vehicle-fleet-data-pipeline.git
-   cd "Vehicle Fleet Data Pipeline"
-   ```
+```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
 
-2. Installez les dépendances :
-   ```bash
-   pip install -r requirements.txt
-   ```
+Copier la configuration d'exemple :
 
-3. Configurez vos variables d'environnement dans un fichier `.env` :
-   ```env
-   POSTGRES_HOST=localhost
-   POSTGRES_PORT=5432
-   POSTGRES_DB=fleet_warehouse
-   POSTGRES_USER=fleet_app
-   POSTGRES_PASSWORD=votre_mot_de_passe
-   SOURCE_FILE=data/sample/vehicles.json
-   REJECTED_DIR=data/rejected
-   ```
+```bash
+Copy-Item .env.example .env
+```
 
-### Exécution
-Pour lancer le pipeline :
+Variables principales :
+
+```env
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=fleet_warehouse
+POSTGRES_USER=fleet_app
+POSTGRES_PASSWORD=change_me
+SOURCE_TYPE=file
+SOURCE_FILE=data/sample/vehicles.json
+REJECTED_DIR=data/rejected
+```
+
+## Lancement avec Docker Compose
+
+Demarrer PostgreSQL :
+
+```bash
+docker compose up -d postgres
+```
+
+Executer le pipeline dans un conteneur :
+
+```bash
+docker compose --profile run up --build pipeline
+```
+
+Arreter les services :
+
+```bash
+docker compose down
+```
+
+Supprimer aussi les donnees PostgreSQL locales :
+
+```bash
+docker compose down -v
+```
+
+## Lancement local
+
+Avec PostgreSQL deja disponible et `.env` configure :
+
+```bash
+fleet-pipeline
+```
+
+Equivalent module Python :
+
 ```bash
 python -m fleet_pipeline.main
 ```
 
-Pour lancer les tests unitaires :
+## Tests et qualite
+
 ```bash
-pytest tests/
+python -m pytest
+python -m ruff check src tests
 ```
 
-## 🛠️ Roadmap (V2)
-- [ ] Intégration d'une API REST pour l'extraction des données.
-- [ ] Mise en place de **dbt Core** pour les transformations SQL analytiques.
-- [ ] Orchestration avec **Apache Airflow**.
-- [ ] Conteneurisation complète avec **Docker Compose**.
-- [ ] CI/CD via **GitHub Actions**.
+La CI GitHub Actions execute les memes controles sur chaque pull request et sur les pushes vers `main` ou `master`.
 
-## 📄 Licence
-Ce projet est sous licence MIT.
+## Requetes analytiques
+
+Le fichier `sql/analytics.sql` contient :
+
+- nombre de positions par vehicule et par jour ;
+- derniere position connue par vehicule ;
+- nombre de rejets par execution et par motif.
+
+## Roadmap
+
+- API REST comme source additionnelle.
+- dbt Core pour les transformations analytiques.
+- Orchestration Airflow.
+- Tests PostgreSQL reels en CI via service container.
