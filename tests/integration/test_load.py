@@ -1,8 +1,10 @@
 """Integration tests for transactional loading, idempotency and audit tracking."""
 
 from datetime import UTC, datetime
+
 import pytest
 from sqlalchemy import create_engine, text
+
 from fleet_pipeline.database import init_db
 from fleet_pipeline.load import load_pipeline_data
 from fleet_pipeline.models import NormalizedRecord, RejectedRecord, ValidationResult
@@ -134,5 +136,8 @@ def test_load_rollback_on_error(test_db_engine):
         veh_count = conn.execute(
             text("SELECT COUNT(*) FROM vehicles WHERE source_vehicle_id = 'fail-veh';")
         ).scalar()
+        failed_runs = conn.execute(
+            text("SELECT COUNT(*) FROM etl_runs WHERE status = 'FAILED';")
+        ).scalar()
         assert veh_count == 0
-
+        assert failed_runs == 1
